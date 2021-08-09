@@ -4,7 +4,7 @@ import Api from '../../service/api';
 
 import './currency-converter.scss';
 
-const CURRENCIES = ['RUB', 'USD', 'EUR', 'GBR', 'CNY'];
+const CURRENCIES = ['RUB', 'USD', 'EUR', 'GBP', 'CNY'];
 const BASE_CURRENCY = 'USD';
 const DEFAULT_SELL_CURRENCY = 'RUB';
 const DEFAULT_BUY_CURRENCY = 'USD';
@@ -18,70 +18,97 @@ function CurrencyConverter({addResult}) {
   const minDate = dayjs().subtract(7, 'day').format('YYYY-MM-DD');
 
   const [formData, setFormData] = useState({
-    'amount-currency-sell': '',
+    'amount-currency-sell':  '1000',
     'amount-currency-buy': '',
     'sell-currency': DEFAULT_SELL_CURRENCY,
     'buy-currency': DEFAULT_BUY_CURRENCY,
   });
 
-  const [currencyQuotes, setCurrencyRates] = useState({});
+  const [currencyQuotes, setCurrencyRates] = useState({
+    [BASE_CURRENCY]: 1,
+  });
 
   const request = useCallback(() => {
     api.getCurrencyRates('latest')
       .then(({rates}) => {
-        setCurrencyRates(rates);
-      })
+        setCurrencyRates((state) => {
+          return {
+            ...state,
+            ...rates,
+          };
+        });
+      });
   }, []);
 
   useEffect(() => request(), [request]);
+
+  useEffect(() => setFormData((state) => {
+
+    if (Object.keys(currencyQuotes).length <= 1) {
+      return state;
+    }
+
+    return {
+      ...state,
+      'amount-currency-buy': (state['amount-currency-sell'] * currencyQuotes[state['buy-currency']] / currencyQuotes[state['sell-currency']]).toFixed(4),
+    }
+  }), [currencyQuotes]);
 
   const handleChangeSelectCurrency = (evt) => {
     const {name, value} = evt.target;
 
     setFormData((state) => {
-      return {
+
+      const updatedState = {
         ...state,
         [name]: value,
-        'amount-currency-sell': '',
-        'amount-currency-buy': '',
-      }
-    })
-  };
-
-  const handleChangeAmountSellCurrency = (evt) => {
-    const {value} = evt.target;
-
-    setFormData((state) => {
-      const coefficientBuyCurrencyToBase = state['buy-currency'] !== BASE_CURRENCY ? currencyQuotes[state['buy-currency']] : 1;
-      const coefficientSellCurrencyToBase = state['sell-currency'] !== BASE_CURRENCY ? currencyQuotes[state['sell-currency']] : 1;
+      };
 
       return {
-        ...state,
-        'amount-currency-sell': value,
-        'amount-currency-buy': (value*coefficientBuyCurrencyToBase/coefficientSellCurrencyToBase).toFixed(4),
-      }
+        ...updatedState,
+        'amount-currency-buy': (updatedState['amount-currency-sell'] * currencyQuotes[updatedState['buy-currency']] / currencyQuotes[updatedState['sell-currency']]).toFixed(4),
+      };
     })
   };
 
-  const handleChangeAmountBuyCurrency = (evt) => {
-    const {value} = evt.target;
+  const handleChangeAmountCurrency = (evt) => {
+    const {value, name} = evt.target;
 
     setFormData((state) => {
-      const coefficientBuyCurrencyToBase = state['buy-currency'] !== BASE_CURRENCY ? currencyQuotes[state['buy-currency']] : 1;
-      const coefficientSellCurrencyToBase = state['sell-currency'] !== BASE_CURRENCY ? currencyQuotes[state['sell-currency']] : 1;
 
-      return {
+      const updatedState = {
         ...state,
-        'amount-currency-sell': (value*coefficientSellCurrencyToBase/coefficientBuyCurrencyToBase).toFixed(4),
-        'amount-currency-buy': value,
+        [name]: value,
+      };
+
+      switch(name) {
+        case 'amount-currency-sell':
+          return {
+            ...updatedState,
+            'amount-currency-buy': (value * currencyQuotes[updatedState['buy-currency']] / currencyQuotes[updatedState['sell-currency']]).toFixed(4),
+          };
+
+        case 'amount-currency-buy':
+          return {
+            ...updatedState,
+            'amount-currency-sell': (value * currencyQuotes[updatedState['sell-currency']] / currencyQuotes[updatedState['buy-currency']]).toFixed(4),
+          };
+
+        default: return {...updatedState};
       }
     })
   };
+
 
   const handleChangeSelectDate = (evt) => {
     api.getCurrencyRates(evt.target.value)
       .then(({rates}) => {
-        setCurrencyRates(rates);
+        setCurrencyRates((state) => {
+          return {
+            ...state,
+            ...rates,
+          };
+        });
       })
   };
 
@@ -105,7 +132,7 @@ function CurrencyConverter({addResult}) {
 
         <div className="currency-converter__item">
           <label htmlFor="amount-currency-sell">У меня есть
-            <input id="amount-currency-sell" name="amount-currency-sell" type="number" value={formData['amount-currency-sell']} placeholder="0" onChange={handleChangeAmountSellCurrency} />
+            <input id="amount-currency-sell" name="amount-currency-sell" type="number" min="0" value={formData['amount-currency-sell']} onChange={handleChangeAmountCurrency} />
           </label>
           <select name="sell-currency" defaultValue={formData['sell-currency']} onChange={handleChangeSelectCurrency}>
             {options}
@@ -113,7 +140,7 @@ function CurrencyConverter({addResult}) {
         </div>
         <div className="currency-converter__item">
           <label htmlFor="amount-currency-buy">Хочу приобрести
-            <input id="amount-currency-buy" name="amount-currency-buy" type="number" value={formData['amount-currency-buy']} placeholder="0" onChange={handleChangeAmountBuyCurrency} />
+            <input id="amount-currency-buy" name="amount-currency-buy" type="number" min="0" value={formData['amount-currency-buy']} onChange={handleChangeAmountCurrency} />
           </label>
           <select name="buy-currency" defaultValue={formData['buy-currency']} onChange={handleChangeSelectCurrency}>
             {options}
