@@ -6,4 +6,25 @@
   margin-top: 0;
   margin-bottom: 0;
   list-style: none;
+
+}
+
+.social__link {
+  color: #1f1e25;
+
+  &--facebook:hover {
+    color: #3b5998;
+  }
+
+  &--instagram:hover {
+    color: #e1306c;
+  }
+
+  &--twitter:hover {
+    color: #00acee;
+  }
+
+  &--youtube:hover {
+    color: #c4302b;
+  }
 }
