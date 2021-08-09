@@ -1,0 +1,20 @@
+.short-phone {
+  width: 200px;
+  padding-left: 30px;
+  background-image: url('./phone1.svg');
+  background-repeat: no-repeat;
+}
+
+.short-phone__tel {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1f1e25;
+}
+
+.short-phone__description {
+  margin-top: 0;
+  font-size: 12px;
+  color: #707c87;
+}

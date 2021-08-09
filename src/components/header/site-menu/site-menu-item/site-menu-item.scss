@@ -1,0 +1,13 @@
+.site-menu-item {
+  font-size: 16px;
+  line-height: 19px;
+  text-decoration: none;
+  color: #1f1e25;
+
+  &:hover {
+    text-decoration: underline;
+    color: #2c36f2;
+  }
+
+  &--active { color: #2c36f2; }
+}

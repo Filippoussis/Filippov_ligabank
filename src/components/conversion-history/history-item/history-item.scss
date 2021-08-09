@@ -1,0 +1,15 @@
+.history-item {
+  display: flex;
+}
+
+.history-item__date {
+  margin-right: 40px;
+}
+
+.history-item__sell {
+  padding-right: 66px;
+  background-image: url('./arrow-right.svg');
+  background-repeat: no-repeat;
+  background-position-x: 90%;
+  background-position-y: 50%;
+}

@@ -1,0 +1,21 @@
+.free-phone {
+  width: 155px;
+  padding-left: 30px;
+  background-image: url('./phone2.svg');
+  background-repeat: no-repeat;
+}
+
+.free-phone__tel {
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1f1e25;
+
+  &:hover { color: #2c36f2; }
+}
+
+.free-phone__description {
+  margin-top: 0;
+  font-size: 12px;
+  color: #707c87;
+}
