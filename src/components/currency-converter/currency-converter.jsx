@@ -147,7 +147,7 @@ function CurrencyConverter({addResult}) {
           </select>
         </div>
 
-        <div><input className="currency-converter__calendar" type="date" ref={inputRef} defaultValue={today} max={today} min={minDate} onChange={handleChangeSelectDate} /></div>
+        <label htmlFor="calendar"><span className="visually-hidden">Выберите дату</span><input id="calendar" className="currency-converter__calendar" type="date" ref={inputRef} defaultValue={today} max={today} min={minDate} onChange={handleChangeSelectDate} /></label>
         <button className="main-button main-button--save-result" type="submit">Сохранить результат</button>
       </form>
     </section>
