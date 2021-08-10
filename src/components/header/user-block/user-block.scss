@@ -1,15 +1,17 @@
 .user-block {
-  padding-left: 30px;
+  display: flex;
+  align-items: center;
   font-size: 16px;
   line-height: 22px;
   text-decoration: none;
-  background-image: url('./enter.svg');
-  background-repeat: no-repeat;
-  background-size: 20px 22px;
   color: #1f1e25;
 
   &:hover {
     text-decoration: underline;
     color: #2c36f2;
   }
+}
+
+.user-block svg {
+  margin-right: 10px;
 }
