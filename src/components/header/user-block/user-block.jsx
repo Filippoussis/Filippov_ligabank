@@ -5,7 +5,7 @@ import './user-block.scss';
 
 function UserBlock() {
   return (
-    <Link to="#" className="user-block">
+    <Link to="#" className="user-block" aria-label="icon-enter">
       <svg width="20" height="22">
         <use xlinkHref="#enter"/>
       </svg>
