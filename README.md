@@ -5,7 +5,7 @@
 ## Краткое описание проекта и применённые технологии
 - Фреймворк React, ограничился изменением состояния в App, без использования Redux
 - Fetch API [frankfurter](https://www.frankfurter.app/)
-- Pixel Perfect вёрстка по макету из Figma
+- Pixel Perfect вёрстка по макету из Figma (только Desktop)
 - использован CSS-препроцессор SASS
 - работа с формой, кастомизация input[type="date"], селектов
 - React Hooks
